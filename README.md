@@ -2,7 +2,7 @@
   <a href="https://red4sec.com" target="_blank"><img src="https://github.com/Red4Sec/NEO-SmartVote/raw/master/Resources/NEO-smart-economy-logo.png" width="200px"></a>
 </p>
 <h1 align="center">
-NEO - Smart Vote
+Smart Vote - Smart Contract Samples
 </h1>
 
 <p align="center">

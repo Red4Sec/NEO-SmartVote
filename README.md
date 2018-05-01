@@ -6,7 +6,7 @@ Smart Vote - Smart Contract Samples
 </h1>
 
 <p align="center">
- NEO Vote Smart Contract, used as example contract in different Workshops.
+ Used as example contract in different Workshops.
 </p>
 
 ## Slides

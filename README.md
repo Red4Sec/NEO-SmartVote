@@ -11,5 +11,5 @@ Smart Vote - Smart Contract Samples
 
 ## Slides
 
-* [CSharp Slides](https://docs.google.com/presentation/d/1aIRG-tIy6RU7MX0n8FSiSFM-5tpzaJz7_FumFAlfhfk)
+* [CSharp Slides](https://github.com/Red4Sec/NEO-SmartVote/raw/master/Resources/NEO%20CSharp%20Workshop.pdf)
 * [Python Slides](https://docs.google.com/presentation/d/1KP2IP0ndGuyqlYPuFkjRoci9EjQqUZESIpDMsF-05Qs)

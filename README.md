@@ -13,3 +13,17 @@ Smart Vote - Smart Contract Samples
 
 * [CSharp Slides](https://github.com/Red4Sec/NEO-SmartVote/raw/master/Resources/NEO%20CSharp%20Workshop.pdf)
 * [Python Slides](https://docs.google.com/presentation/d/1KP2IP0ndGuyqlYPuFkjRoci9EjQqUZESIpDMsF-05Qs)
+
+## Problems with docker-compose?
+
+*Solve error: ERROR: Version in "./docker-compose.yml" is unsupported*
+
+Follwed below steps to upgrade docker-compose in ubuntu16.04
+
+```
+$which docker-compose
+/usr/bin/docker-compose
+$sudo rm /usr/bin/docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.20.0/docker-compose-`uname -s`-uname -m -o /usr/bin/docker-compose
+chmod +x /usr/bin/docker-compose
+```

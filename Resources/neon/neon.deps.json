@@ -1,17 +1,17 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0/win10-x64",
-    "signature": "3042eeb15956567d5b24e5c16a16ed941ef235e0"
+    "signature": "8c7cd232d010881ab65be99c9d4d34c7674475e3"
   },
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v2.0": {},
     ".NETCoreApp,Version=v2.0/win10-x64": {
-      "neon/2.0.3.5": {
+      "neon/2.3.0": {
         "dependencies": {
           "antshares.monocecil": "1.0.0",
           "Microsoft.NETCore.App": "2.0.0",
-          "Neo.VM": "2.0.3"
+          "Neo.VM": "2.3.0"
         },
         "runtime": {
           "neon.dll": {}
@@ -51,7 +51,7 @@
         }
       },
       "Microsoft.NETCore.Platforms/2.0.0": {},
-      "Neo.VM/2.0.3": {
+      "Neo.VM/2.3.0": {
         "dependencies": {
           "NETStandard.Library": "2.0.0"
         },
@@ -302,7 +302,7 @@
     }
   },
   "libraries": {
-    "neon/2.0.3.5": {
+    "neon/2.3.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -349,12 +349,12 @@
       "path": "microsoft.netcore.platforms/2.0.0",
       "hashPath": "microsoft.netcore.platforms.2.0.0.nupkg.sha512"
     },
-    "Neo.VM/2.0.3": {
+    "Neo.VM/2.3.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-RHwmtXI3luISmHlMR3Hnm8hm+SPwQc4K8LV1MlSr6iszszFefM/xpn79lkJuRg99kvM/BaKv0TfE1iU7drPyeg==",
-      "path": "neo.vm/2.0.3",
-      "hashPath": "neo.vm.2.0.3.nupkg.sha512"
+      "sha512": "sha512-TCqFyI+zY+ELB2pL6gfxSBV2v7ca5zjMST8r67TL88CcQorIUDFHjEm1+Cx5QYh3MAfDmS8wZ91ig12dAXoU8Q==",
+      "path": "neo.vm/2.3.0",
+      "hashPath": "neo.vm.2.3.0.nupkg.sha512"
     },
     "NETStandard.Library/2.0.0": {
       "type": "package",

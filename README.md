@@ -10,7 +10,7 @@ Smart Vote - Smart Contract Samples
 </p>
 
 ## Slides
-
+* [BSL Slides](https://drive.google.com/open?id=1n9E8ek_pHbqlTLGNRPMKidniwV3WYA95oH6rAWNKrZg)
 * [CSharp Slides](https://github.com/Red4Sec/NEO-SmartVote/raw/master/Resources/NEO%20CSharp%20Workshop.pdf)
 * [Python Slides](https://docs.google.com/presentation/d/1KP2IP0ndGuyqlYPuFkjRoci9EjQqUZESIpDMsF-05Qs)
 

@@ -1,6 +1,6 @@
 ﻿using Neo.SmartContract.Framework;
 using Neo.SmartContract.Framework.Services.Neo;
-using System;
+using Neo.SmartContract.Framework.Services.System;
 
 namespace Neo.SmartContract
 {
@@ -9,39 +9,40 @@ namespace Neo.SmartContract
         /// <summary>
         /// SmartContract's Entry Point
         /// Parameter list:
-        ///     http://docs.neo.org/en-us/sc/tutorial/Parameter.html
+        ///     https://docs.neo.org/en-us/sc/Parameter.html
         /// </summary>
         /// <param name="operation">The name of the operation to perform (07)</param>
         /// <param name="args">List of arguments along with the operation(10)</param>
-        /// <returns>result of the execution(01)</returns>
-        public static Object Main(string operation, params object[] args)
+        /// <returns>result of the execution(10)</returns>
+        public static object Main(string operation, params object[] args)
         {
-            if (Runtime.Trigger == TriggerType.Verification)
-            {
-                // Should not happend
-                return true;
-            }
-            else if (Runtime.Trigger == TriggerType.Application)
-            {
-                if (operation == "register_proposal") return Register_proposal(args);
-                else if (operation == "vote") return Vote(args);
-                else if (operation == "count") return Count(args);
-            }
+            if (operation == "register_proposal") return Register_proposal(args);
+            else if (operation == "vote") return Vote(args);
+            else if (operation == "count") return Count(args);
 
             return false;
         }
+
         /// <summary>
         /// Vote for a proposal
         /// </summary>
-        /// <param name="args">list of arguments [PROPOSAL_ID, VOTER ADDR, VOTE]</param>
+        /// <param name="args">list of arguments [PROPOSAL_ID, VOTE]</param>
         /// <returns>result of the execution</returns>
         static bool Vote(object[] args)
         {
-            if (args.Length != 3)
+            if (args.Length != 2)
                 return false;
 
             // get proposal from storage
-            string proposal_id = (string)args[0];
+            byte[] proposal_id = (byte[])args[0];
+            int vote = (int)args[1];
+
+            // Extract caller
+            Transaction tx = (Transaction)ExecutionEngine.ScriptContainer;
+            TransactionOutput[] inputs = tx.GetReferences();
+            TransactionOutput reference = inputs[0];
+            byte[] caller = reference.ScriptHash;
+
             StorageContext ctx = Storage.CurrentContext;
             byte[] proposal_storage = Storage.Get(ctx, proposal_id);
 
@@ -53,7 +54,7 @@ namespace Neo.SmartContract
             }
 
             // check if address already voted
-            string key = proposal_id + (string)args[1];
+            byte[] key = proposal_id.Concat(caller);
             if (Storage.Get(ctx, key).Length > 0)
             {
                 Runtime.Log("Already voted");
@@ -64,7 +65,7 @@ namespace Neo.SmartContract
             object[] proposal = (object[])proposal_storage.Deserialize();
 
             // check if tx is right signed
-            if (!Runtime.CheckWitness((byte[])args[1]))
+            if (!Runtime.CheckWitness(caller))
             {
                 Runtime.Log("You are not who you say");
                 return false;
@@ -76,7 +77,7 @@ namespace Neo.SmartContract
             while (index < ((string[])proposal[3]).Length)
             {
                 // for address in proposal[3]:
-                if ((object)((string[])proposal[3])[index] == args[1])
+                if ((object)((string[])proposal[3])[index] == caller)
                 {
                     authorized = true;
                     break;
@@ -90,7 +91,7 @@ namespace Neo.SmartContract
             }
 
             // increment vote counter
-            if ((int)args[2] == 1)
+            if (vote == 1)
             {
                 Runtime.Log("Yes!");
                 proposal[1] = (int)proposal[1] + 1;
@@ -109,6 +110,7 @@ namespace Neo.SmartContract
             Storage.Put(ctx, key, 1);
             return true;
         }
+
         /// <summary>
         /// Register a New prosal
         /// </summary>
@@ -155,6 +157,7 @@ namespace Neo.SmartContract
 
             return true;
         }
+
         /// <summary>
         /// Count the votes of a proposal
         /// </summary>

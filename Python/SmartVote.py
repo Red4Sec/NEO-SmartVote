@@ -5,7 +5,7 @@ SmartVote - smart contract example
 Author: belane
 Email: belane@cityofzion.io
 
-Date: 2018
+Date: 2019
 
 """
 
@@ -25,8 +25,9 @@ def Main(operation, args):
     """
     :param operation: str The name of the operation to perform (07)
     :param args: list of arguments along with the operation (10)
-    :return: bool, result of the execution (01)
-    doc: docs.neo.org/en-us/sc/tutorial/Parameter.html
+    :return: Array, result of the execution (10)
+
+    doc: https://docs.neo.org/en-us/sc/Parameter.html
     """
 
     if operation == 'register_proposal':
@@ -151,7 +152,7 @@ def count(args):
     """
     Count the votes of a proposal
     :param args: list of arguments [PROPOSAL_ID]
-    :return: bool, result of the execution
+    :return: Array, return proposal
     """
     if len(args) != 1:
         return False
@@ -178,4 +179,4 @@ def count(args):
     print(votes_yes)
     print(votes_no)
 
-    return True
+    return proposal

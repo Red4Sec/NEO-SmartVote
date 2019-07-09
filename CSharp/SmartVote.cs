@@ -24,6 +24,53 @@ namespace Neo.SmartContract
         }
 
         /// <summary>
+        /// Register a New prosal
+        /// </summary>
+        /// <param name="args">list of arguments [PROPOSA ID, PROPOSAL TEXT, AUTHORIZED ADDR 1, AUTHORIZED ADDR N, ...]</param>
+        /// <returns>Result of the execution</returns>
+        static bool Register_proposal(object[] args)
+        {
+            // check proposal existence
+            string proposal_id = (string)args[0];
+            StorageContext ctx = Storage.CurrentContext;
+            if (Storage.Get(ctx, proposal_id).Length != 0)
+            {
+                Runtime.Log("Already a Proposal");
+                return false;
+            }
+
+            // proposal arguments
+            object[] proposal = new object[4];
+            proposal[0] = args[1];    // description text
+            proposal[1] = "0";        // yes counter
+            proposal[2] = "0";        // no counter
+
+            // iterate from the third parameter to extract authorized address
+            int index = 2;
+            string[] proposal_address = new string[args.Length - 2];
+            while (index < args.Length)
+            {
+                string address = (string)args[index];
+                // check address format
+                if (address.Length != 20)
+                {
+                    Runtime.Log("bad address format");
+                    return false;
+                }
+
+                proposal_address[index - 2] = address;
+                index += 1;
+            }
+            proposal[3] = proposal_address; // authorized address
+
+            // serialize proposal and write to storage
+            byte[] proposal_storage = proposal.Serialize();
+            Storage.Put(ctx, proposal_id, proposal_storage);
+
+            return true;
+        }
+
+        /// <summary>
         /// Vote for a proposal
         /// </summary>
         /// <param name="args">list of arguments [PROPOSAL_ID, VOTE]</param>
@@ -108,53 +155,6 @@ namespace Neo.SmartContract
 
             // mark address as voted
             Storage.Put(ctx, key, 1);
-            return true;
-        }
-
-        /// <summary>
-        /// Register a New prosal
-        /// </summary>
-        /// <param name="args">list of arguments [PROPOSA ID, PROPOSAL TEXT, AUTHORIZED ADDR 1, AUTHORIZED ADDR N, ...]</param>
-        /// <returns>Result of the execution</returns>
-        static bool Register_proposal(object[] args)
-        {
-            // check proposal existence
-            string proposal_id = (string)args[0];
-            StorageContext ctx = Storage.CurrentContext;
-            if (Storage.Get(ctx, proposal_id).Length != 0)
-            {
-                Runtime.Log("Already a Proposal");
-                return false;
-            }
-
-            // proposal arguments
-            object[] proposal = new object[4];
-            proposal[0] = args[1];    // description text
-            proposal[1] = "0";        // yes counter
-            proposal[2] = "0";        // no counter
-
-            // iterate from the third parameter to extract authorized address
-            int index = 2;
-            string[] proposal_address = new string[args.Length - 2];
-            while (index < args.Length)
-            {
-                string address = (string)args[index];
-                // check address format
-                if (address.Length != 20)
-                {
-                    Runtime.Log("bad address format");
-                    return false;
-                }
-
-                proposal_address[index - 2] = address;
-                index += 1;
-            }
-            proposal[3] = proposal_address; // authorized address
-
-            // serialize proposal and write to storage
-            byte[] proposal_storage = proposal.Serialize();
-            Storage.Put(ctx, proposal_id, proposal_storage);
-
             return true;
         }
 

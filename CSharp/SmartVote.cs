@@ -163,7 +163,7 @@ namespace Neo.SmartContract
         /// </summary>
         /// <param name="args">list of arguments [PROPOSAL_ID]</param>
         /// <returns>Result of the execution</returns>
-        static bool Count(object[] args)
+        static object Count(object[] args)
         {
             if (args.Length != 1)
                 return false;
@@ -190,7 +190,7 @@ namespace Neo.SmartContract
             Runtime.Log((string)proposal[1]);
             Runtime.Log((string)proposal[2]);
 
-            return true;
+            return proposal;
         }
     }
 }

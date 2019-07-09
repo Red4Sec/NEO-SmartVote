@@ -1,0 +1,25 @@
+{
+    "hash":"0xb972647dd80213c612a80e8cd6620143ed9e1950",
+    "entrypoint":"Main",
+    "functions":
+    [
+        {
+            "name":"Main",
+            "parameters":
+            [
+                {
+                    "name":"operation",
+                    "type":"String"
+                },
+                {
+                    "name":"args",
+                    "type":"Array"
+                }
+            ],
+            "returntype":"ByteArray"
+        }
+    ],
+    "events":
+    [
+    ]
+}

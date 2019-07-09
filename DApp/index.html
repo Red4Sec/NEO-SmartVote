@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- NEON-JS -->
+  <script src="js/browser.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <script type="text/javascript" src="js/loader.js"></script>
+  <script src="js/web.js"></script>
+  <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/scrolling-nav.css" rel="stylesheet">
+
+  <title>SmartVote - Red4Sec</title>
+
+</head>
+
+<body id="page-top">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand js-scroll-trigger" href="index.html"><img width="35%" src="assets/img/logo.svg"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#about">Proposals</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <header class="bg-primary text-white">
+    <div class="container text-center">
+      <h1>Welcome to SmartVote</h1>
+      <p class="lead">Decentralized Voting System</p>
+    </div>
+  </header>
+  <section id="about">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+
+          <!-- DAPP Code -->
+
+          <script>
+            // Get Proposal ID from url parameter
+            var proposal = getUrlParameter('proposal');         
+            if (proposal == undefined) {
+              document.write("<h2>Sent your proposal ID</h2><p class='lead'>In order to obtain the voting results, please enter your proposal ID.</p><form method='GET'><input type='text' name='proposal'/> <input type='submit' class='btn btn-success' value='Check Results'></form>");
+            }
+            else {
+              document.write("<p><h4>RPC Node</h4><div id='node'></div></p><p><h4>Results</h4><div id='result'></div></p>");
+              // Convert to hex
+              //var proposalID = Neon.u.str2hexstring(proposal);
+              var proposalID = proposal;
+              if (parseInt(proposal) == proposalID) {
+                proposalID = parseInt(proposal);
+              }
+              
+              // Dynamic RPC
+              //var apiEndPoint = 'http://localhost:4000/api/main_net/
+              //var apiProvider = new Neon.api.neoscan.instance(apiEndPoint);
+              //apiProvider.getRPCEndpoint().then(r => {
+              //    rpcEndPoint = r
+              
+              // Static RPC
+              var rpcEndPoint = 'http://localhost:30333'
+              const scriptHash = 'cf427fa6ed4874ece97a80b9b1e9d24d402675d9';
+
+              // Get the result of count method using proposal id.
+              const getCount = { scriptHash, operation: 'count', args: [proposalID] }
+              const script = Neon.default.create.script(getCount);
+              document.getElementById("node").innerHTML = rpcEndPoint;
+              
+              // Invoke
+              Neon.rpc.Query.invokeScript(script)
+              .execute(rpcEndPoint)
+              .then(res => {
+                var result = res.result.stack;
+
+                console.log("Calling: " + rpcEndPoint);
+                console.log("RPC Result:");
+                console.log(res);
+                console.log("Useful Result:");
+                console.log(result);
+                var exist = true;
+
+                try {                      
+                  var proposal = Neon.u.hexstring2str(result[0]['value'][0]['value']);
+                  //var yes = parseInt(String.fromCharCode(result[0]['value'][1]['value']));
+                  //var no = parseInt(String.fromCharCode(result[0]['value'][2]['value']));
+                  var yes = parseInt(result[0]['value'][1]['value']);
+                  var no = parseInt(result[0]['value'][2]['value']);
+
+                  if (isNaN(yes)) yes = 0;
+                  if (isNaN(no)) no = 0;
+                  exist = true;
+                }
+                catch {
+                  exist = false;
+                  alert("Proposal not found");
+                }
+
+                if (exist) {                  
+                  document.getElementById("result").innerHTML = "<b>Proposal:</b> " + proposal + "<br>" + "<span style='color:#90ce32;'>Yes: " + yes + "</span><br><span style='color:red;'>No: " + no + "</span>";
+                }
+                else {
+                  document.getElementById("result").innerHTML="<b class='red'>Proposal not found</b>";
+                }
+
+                // Charts
+                google.charts.load("current", {packages:["corechart"]});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                  var data = google.visualization.arrayToDataTable([
+                      ['Task', proposal],
+                      ['Yes',  yes],
+                      ['No',   no]
+                  ]);
+                  var options = {
+                  title: proposal,
+                  is3D: true,
+                  colors:['#90ce32','#ff0000']
+                  };
+                  var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+                  chart.draw(data, options);
+                  }
+                }) 
+              //});
+              document.write("<center><div id='piechart_3d' style='width: 900px; height: 500px;'></div>");
+              document.write("<a href='index.html'>Check another proposal</a></center>");
+            }
+          </script>
+
+          <!-- end DAPP Code -->
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="red4secBrand">
+				<a href="https://red4sec.com" target="_blank">
+					<div>
+						<p>Developed with ❤ by</p> 
+						<p><img src="assets/img/red4sec.png" width="110" height="50"></p>
+					</div>
+				</a>
+			</div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="assets/jquery/jquery.min.js"></script>
+  <script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Plugin JavaScript -->
+  <script src="assets/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Custom JavaScript for this theme -->
+  <script src="js/scrolling-nav.js"></script>
+
+</body>
+</html>

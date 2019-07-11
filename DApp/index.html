@@ -78,7 +78,7 @@
               // Get the result of count method using proposal id.
               const getCount = { scriptHash, operation: 'count', args: [proposalID] }
               const script = Neon.default.create.script(getCount);
-              document.getElementById("node").innerHTML = rpcEndPoint;
+              document.getElementById("node").innerHTML = sanitizeHTML(rpcEndPoint);
               
               // Invoke
               Neon.rpc.Query.invokeScript(script)
@@ -95,10 +95,10 @@
 
                 try {                      
                   var proposal = Neon.u.hexstring2str(result[0]['value'][0]['value']);
-                  //var yes = parseInt(String.fromCharCode(result[0]['value'][1]['value']));
-                  //var no = parseInt(String.fromCharCode(result[0]['value'][2]['value']));
-                  var yes = parseInt(result[0]['value'][1]['value']);
-                  var no = parseInt(result[0]['value'][2]['value']);
+                  var yes = parseInt(String.fromCharCode(result[0]['value'][1]['value']));
+                  var no = parseInt(String.fromCharCode(result[0]['value'][2]['value']));
+                  //var yes = parseInt(result[0]['value'][1]['value']);
+                  //var no = parseInt(result[0]['value'][2]['value']);
 
                   if (isNaN(yes)) yes = 0;
                   if (isNaN(no)) no = 0;
@@ -110,7 +110,7 @@
                 }
 
                 if (exist) {                  
-                  document.getElementById("result").innerHTML = "<b>Proposal:</b> " + proposal + "<br>" + "<span style='color:#90ce32;'>Yes: " + yes + "</span><br><span style='color:red;'>No: " + no + "</span>";
+                  document.getElementById("result").innerHTML = "<b>Proposal:</b> " + sanitizeHTML(proposal) + "<br>" + "<span style='color:#90ce32;'>Yes: " + yes + "</span><br><span style='color:red;'>No: " + no + "</span>";
                 }
                 else {
                   document.getElementById("result").innerHTML="<b class='red'>Proposal not found</b>";
